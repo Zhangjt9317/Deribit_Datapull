@@ -8,9 +8,7 @@ import websockets
 import json
 import time
 import datetime
-
-client_id = "dtzNFB-6"
-client_secret = "15EGz-IQyJbKpkYLrk9w97MgN6UhupSXS22yWYPjrLo"
+from config import client_id, client_secret
 
 # currently only working on market data pulling
 methods = [
@@ -35,6 +33,7 @@ methods = [
     'get_tradingview_chart_data',               #time
     'ticker'
 ]
+
 time_methods=[
     methods[6],
     methods[7],
@@ -46,24 +45,23 @@ time_methods=[
 ]
 
 currencies = ["BTC","ETH"]
-kinds = ['future','option']
+kinds = ["future","option"]
 types = ["settlement", "delivery", "bankruptcy"]
-sortings = ['asc','desc','default']
-lengths = ['8h','24h','1m']
-resolutions = ['1','3','5','10','15','30','60','120','180','360','720','1D']
+sortings = ["asc","desc","default"]
+lengths = ["8h","24h","1m"]
+resolutions = ["1","3","5","10","15","30","60","120","180","360","720","1D"]
 
 def let_user_pick(options):
-    print("Please choose:")
+    print("Please choose: ")
     for idx, element in enumerate(options):
-        print("{}) {}".format(idx+1,element))
+        print("{}) {}".format(idx+1, element))
     i = input("Enter number: ")
     try:
         if 0 < int(i) <= len(options):
-            choice = str(options[int(i)-1])
-            print(choice)
-    except:
-        pass
-    return choice
+            option = str(options[int(i)-1])
+            return(option)
+    except KeyError:
+        return "Invalid option!"
 
 def timestamp():
     """
@@ -94,18 +92,28 @@ def process_msg(msg):
     """
     msg = json.dumps(msg, indent=4, sort_keys=True)
     msg = json.loads(msg)
-    print(type(msg))
+    # print(type(msg))
 
     ls = []
     ignored_values = set(["null", "", None])
     for key in msg['params']:
         if msg['params'][key] in ignored_values:
-            print(key)
+            # print(key)
             ls.append(key)
 
     for key in ls:
         del(msg['params'][key])
+    print(msg)
     return msg
+
+# parse for requst about trades and ticker in market section now
+# def parse_json(req, res):
+#     """
+#     This is for Deribit.com API requests, different response have different returns
+#     :param response:
+#     :return:
+#     """
+#     if req == "ticker":
 
 async def call_api(msg):
    async with websockets.connect('wss://test.deribit.com/ws/api/v2') as websocket:
@@ -116,7 +124,7 @@ async def call_api(msg):
 
            response = json.loads(response)
            # get trades data from json result
-           value = response['result']['trades']
+           value = response
            with open("Data/methods.json","w") as fp:
                json.dump(value, fp)
 
@@ -134,7 +142,7 @@ if __name__ == "__main__":
     currency = let_user_pick(currencies)
     kind = let_user_pick(kinds)
     count = input("count of trades? ")
-    # instrument = input('name of the instrument: ')
+    instrument = input('name of the instrument: ')
     # old = input("Include old trades (ture or false)? ")
     # sorting = let_user_pick(sortings)
     # length = let_user_pick(lengths)
@@ -152,7 +160,7 @@ if __name__ == "__main__":
                 "start_timestamp": start,
                 "end_timestamp": end,
                 "count": count,
-                "instrument_name": None,
+                "instrument_name": instrument,
                 "length": None,
                 "type" : None,
                 "expired": False,
@@ -164,4 +172,8 @@ if __name__ == "__main__":
 
     msg = process_msg(msg)
 
-    asyncio.get_event_loop().run_until_complete(call_api(json.dumps(msg)))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(call_api(json.dumps(msg)))
+    loop.stop()
+
+

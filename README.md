@@ -20,3 +20,16 @@ you must see this in the Deribit.com, and if you want to reproduce the data shee
 ![BTC Option Sheete](Images/BTC_option.png)
 
 -- currently working on 
+
+
+## Current Limits on API
+
+Current limits:
+
+* Matching engine requests - 5/s (20 in burst)
+* Other requests - 30/s (400 in burst)
+
+## Ticker 
+
+the `public/ticker` is a real-time request that can be made multiple times
+

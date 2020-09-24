@@ -15,14 +15,17 @@ cwd = os.getcwd()
 # file in read mode and only Python files
 # will be opened
 def open_file():
-    file = filedialog.askopenfile(initialdir=cwd,mode ='r',filetypes =[('JSON Files', '*.json')])
-    if file is not None:
-        content = file.read()
-        print(content)
+    file = filedialog.askopenfilename(filetypes =[('JSON Files', '*.json')])
+    return file
 
 file = open_file()
+# print(file)
+# print(type(file))
 
-df = pd.read_json(file)
+with open(file, 'r') as outfile:
+    data = json.load(outfile)
+
+df = pd.json_normalize(data)
 print(df)
 
-df.to_csv("Data/last_trades.csv")
+df.to_csv("Data/ticker.csv")
