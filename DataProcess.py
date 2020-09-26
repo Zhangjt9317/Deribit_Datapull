@@ -15,7 +15,7 @@ cwd = os.getcwd()
 # file in read mode and only Python files
 # will be opened
 def open_file():
-    file = filedialog.askopenfilename(filetypes =[('JSON Files', '*.json')])
+    file = filedialog.askopenfilename(initialdir=cwd,filetypes =[('JSON Files', '*.json')])
     return file
 
 file = open_file()

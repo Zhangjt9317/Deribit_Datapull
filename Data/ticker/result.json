@@ -1,0 +1,34 @@
+{
+    "jsonrpc": "2.0",
+    "id": 8106,
+    "result": {
+        "timestamp": 1601075802445,
+        "stats": {
+            "volume_usd": 463639830.0,
+            "volume": 43629.28984763,
+            "price_change": -0.6142,
+            "low": 10379.5,
+            "high": 10785.0
+        },
+        "state": "open",
+        "settlement_price": 10687.34,
+        "open_interest": 692835362,
+        "min_price": 10521.93,
+        "max_price": 10842.4,
+        "mark_price": 10681.96,
+        "last_price": 10680.0,
+        "instrument_name": "BTC-PERPETUAL",
+        "index_price": 10678.27,
+        "funding_8h": 0.00000188,
+        "estimated_delivery_price": 10678.27,
+        "current_funding": 0.0,
+        "best_bid_price": 10679.5,
+        "best_bid_amount": 360.0,
+        "best_ask_price": 10682.0,
+        "best_ask_amount": 80390.0
+    },
+    "usIn": 1601075802252770,
+    "usOut": 1601075802254431,
+    "usDiff": 1661,
+    "testnet": true
+}

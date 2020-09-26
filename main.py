@@ -6,9 +6,7 @@
 import asyncio
 import websockets
 import json
-import time
 import datetime
-from config import client_id, client_secret
 
 # currently only working on market data pulling
 methods = [
@@ -31,7 +29,6 @@ methods = [
     'get_order_book',
     'get_trade_volumes',
     'get_tradingview_chart_data',               #time
-    'ticker'
 ]
 
 time_methods=[
@@ -52,6 +49,11 @@ lengths = ["8h","24h","1m"]
 resolutions = ["1","3","5","10","15","30","60","120","180","360","720","1D"]
 
 def let_user_pick(options):
+    """
+    let user pick among options
+    :param options:
+    :return:
+    """
     print("Please choose: ")
     for idx, element in enumerate(options):
         print("{}) {}".format(idx+1, element))
@@ -65,6 +67,7 @@ def let_user_pick(options):
 
 def timestamp():
     """
+    convert to timestamp for some requests
     :return: datetime to timestamp
     """
     # ask for the expiration date for option and convert to timestamp
@@ -87,6 +90,7 @@ def timestamp():
 
 def process_msg(msg):
     """
+    process the json massage
     :param msg: dict
     :return: shortened dict
     """
@@ -106,27 +110,25 @@ def process_msg(msg):
     print(msg)
     return msg
 
-# parse for requst about trades and ticker in market section now
-# def parse_json(req, res):
-#     """
-#     This is for Deribit.com API requests, different response have different returns
-#     :param response:
-#     :return:
-#     """
-#     if req == "ticker":
 
 async def call_api(msg):
-   async with websockets.connect('wss://test.deribit.com/ws/api/v2') as websocket:
-       await websocket.send(msg)
-       while websocket.open:
-           response = await websocket.recv()
-           print(response)
+    """
+    make async api request for data
+    :param msg: json text massage
+    :return: json text data
+    """
+    async with websockets.connect('wss://test.deribit.com/ws/api/v2') as websocket:
+        await websocket.send(msg)
+        while websocket.open:
+            response = await websocket.recv()
+            print(response)
 
-           response = json.loads(response)
-           # get trades data from json result
-           value = response
-           with open("Data/methods.json","w") as fp:
-               json.dump(value, fp)
+            response = json.loads(response)
+            # get trades data from json result
+            value = response
+            with open("Data/methods.json","w") as fp:
+                json.dump(value, fp)
+
 
 if __name__ == "__main__":
     choice = let_user_pick(methods)

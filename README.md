@@ -31,5 +31,9 @@ Current limits:
 
 ## Ticker 
 
-the `public/ticker` is a real-time request that can be made multiple times
+the `public/ticker` is a real-time request that can be made multiple times, so you can use the ticker method instead of main,
+run 
 
+`python ticker.py`
+
+to start recording for ticker data every 3 seconds. Data will be downloaded into the `Data/ticker` folder
